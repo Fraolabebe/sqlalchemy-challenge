@@ -107,12 +107,12 @@ def tobs():
         date >= (SELECT DATE(MAX(date),'-1 year') FROM measurement)
         AND station = 'USC00519281'
     '''
-    temp_obs_df = pd.read_sql(query, conn)
-    temp_obs_df
+    temprature_df = pd.read_sql(query, conn)
+    temprature_df
     
-    tobs_json = temp_obs_df.to_json(orient='records')
+    temprature_df_json = temprature_df.to_json(orient='records')
     conn.close()
-    return tobs_json 
+    return temprature_df_json 
 #%%
 
 
