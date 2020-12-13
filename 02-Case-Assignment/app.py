@@ -19,7 +19,7 @@ from flask import Flask
 
 
 
-engine = create_engine('sqlite:///hawaii.sqlite')
+engine = create_engine('sqlite:///Resources/hawaii.sqlite')
 conn = engine.connect()
 
 #%%
@@ -41,9 +41,9 @@ def Homepage():
     )
 
 #%%
-@app.route('/api/v1.0/precipitation')
+@app.route('/api/v1.0/precipitation')    
 def prcp():
-    conn = engine.connect()
+    conn = engine.connect()      
     query = '''
     SELECT 
         date, 
@@ -71,19 +71,20 @@ def prcp():
 def stations():
     conn = engine.connect()
     query = '''
-    SELECT
-        s.station AS station_code,
-        s.name AS station_name,
-        COUNT(*) as station_count
+    SELECT 
+        s.station AS "Station code",
+        s.name AS "Station Name",
+        COUNT(*) as "Station Count"
     FROM
         measurement m
         INNER JOIN station s
         ON m.station = s.station
-    GROUP BY 
+    GROUP BY
         s.station,
         s.name
     ORDER BY
-        station_count DESC
+        "Station Count" DESC,
+        "Station Name"
 '''
 
     active_stations_df = pd.read_sql(query, conn)
@@ -95,24 +96,24 @@ def stations():
 
 
 @app.route("/api/v1.0/tobs")
-def tobs():
+def temprature():
     conn = engine.connect()
     query = '''
     SELECT
         date,
-        tobs
+        tobs AS temp_observed
     FROM
         measurement
     WHERE
         date >= (SELECT DATE(MAX(date),'-1 year') FROM measurement)
         AND station = 'USC00519281'
     '''
-    temprature_df = pd.read_sql(query, conn)
-    temprature_df
+    temp_obs_df = pd.read_sql(query, conn)
+    temp_obs_df
     
-    temprature_df_json = temprature_df.to_json(orient='records')
+    temp_obs_json = temp_obs_df.to_json(orient='records')
     conn.close()
-    return temprature_df_json 
+    return temp_obs_json 
 #%%
 
 
