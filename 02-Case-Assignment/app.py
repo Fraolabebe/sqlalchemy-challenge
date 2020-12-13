@@ -42,7 +42,7 @@ def Homepage():
 
 #%%
 @app.route('/api/v1.0/precipitation')    
-def prcp():
+def precipitation():
     conn = engine.connect()      
     query = '''
     SELECT 
